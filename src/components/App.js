@@ -1,11 +1,11 @@
 import React from 'react';
 import DevTools from '../DevTools';
-import Counter from './Counter';
+import TodoList from './TodoList';
 
 const App = () => (
   <div>
     <DevTools />
-    <Counter />
+    <TodoList />
   </div>
 );
 

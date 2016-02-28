@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
-import countProvider from './providers/count';
+import todosProvider from './providers/todos';
 
 export default combineReducers({
-  count: countProvider.reducers,
+  todos: todosProvider.reducers,
 });
