@@ -6,7 +6,7 @@ class TodoCreator extends Component {
   };
 
   submit = () => {
-    const title = this.refs.title.value;
+    const title = this.refs.input.value;
 
     if (!title) {
       return;
@@ -23,18 +23,18 @@ class TodoCreator extends Component {
   }
 
   reset = () => {
-    this.refs.title.value = '';
+    this.refs.input.value = '';
   };
 
   render() {
     return (
-      <div>
-        <input
-          ref="title"
-          onKeyDown={this.handleReturn}
-        />
-        <button onClick={this.submit}>Add</button>
-      </div>
+      <input
+        ref="input"
+        onKeyDown={this.handleReturn}
+        className="new-todo"
+        placeholder="What needs to be done?"
+        autofocus
+      />
     );
   }
 }

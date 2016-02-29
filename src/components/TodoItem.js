@@ -15,11 +15,25 @@ class TodoItem extends Component {
     const { title, completed } = this.props.todo;
 
     return (
-      <div>
-        <div>{title}</div>
-        <input type="checkbox" value={completed} onClick={this.toggle} />
-        <button onClick={this.delete}>x</button>
-      </div>
+      <li>
+        <div className="view">
+          <input
+            value={completed}
+            onClick={this.toggle}
+            className="toggle"
+            type="checkbox"
+          />
+          <label>{title}</label>
+          <button
+            onClick={this.delete}
+            className="destroy"
+          />
+        </div>
+        <input
+          className="edit"
+          value="Create a TodoMVC template"
+        />
+      </li>
     );
   }
 }
