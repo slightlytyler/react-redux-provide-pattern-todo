@@ -18,7 +18,7 @@ class TodoCreator extends Component {
 
   handleReturn = e => {
     if (e.which === 13) {
-      this.submit;
+      this.submit();
     }
   }
 
