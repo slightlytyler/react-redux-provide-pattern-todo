@@ -13,12 +13,12 @@ class TodoItem extends Component {
 
   render() {
     const { title, completed } = this.props.todo;
-
+    console.log(completed);
     return (
-      <li>
+      <li className={completed ? 'completed' : ''}>
         <div className="view">
           <input
-            value={completed}
+            checked={completed}
             onClick={this.toggle}
             className="toggle"
             type="checkbox"

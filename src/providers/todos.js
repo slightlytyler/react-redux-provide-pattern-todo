@@ -31,6 +31,21 @@ todos.actions.toggleTodo = id => (dispatch, getState) => {
   });
 };
 
+todos.actions.toggleAll = () => (dispatch, getState) => {
+  const { records, recordsById } = getState().todos;
+  const allCompleted = records.every(id => recordsById[id].completed);
+
+  records.forEach(id =>
+    dispatch({
+      type: UPDATE_TODO,
+      id,
+      payload: {
+        completed: !allCompleted
+      }
+    })
+  );
+};
+
 todos.actions.clearCompleted = () => (dispatch, getState) => {
   const { records, recordsById } = getState().todos;
   const { deleteTodo } = todos.actions;
