@@ -4,13 +4,17 @@ import TodoList from './TodoList';
 class TodoMain extends Component {
   static propTypes = {
     toggleAll: PropTypes.func.isRequired,
+    allCompleted: PropTypes.bool.isRequired,
   };
 
   render() {
+    const { toggleAll, allCompleted } = this.props;
+
     return (
       <section className="main">
         <input
-          onClick={this.props.toggleAll}
+        checked={allCompleted}
+          onClick={toggleAll}
           className="toggle-all"
           type="checkbox"
         />

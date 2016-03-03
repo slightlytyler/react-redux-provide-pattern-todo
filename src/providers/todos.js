@@ -57,4 +57,13 @@ todos.actions.clearCompleted = () => (dispatch, getState) => {
   });
 };
 
+// Selectors
+import { createSelector } from 'reselect'
+
+todos.selectors.allCompleted = createSelector(
+  todos.selectors.records,
+  todos.selectors.recordsById,
+  (records, recordsById) => records.length !== 0 ? records.every(id => recordsById[id].completed) : false
+);
+
 export default todos;
