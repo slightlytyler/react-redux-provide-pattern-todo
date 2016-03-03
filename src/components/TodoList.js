@@ -3,11 +3,11 @@ import TodoItem from './TodoItem';
 
 class TodoList extends Component {
   static propTypes = {
-    todos: PropTypes.array.isRequired,
+    currentTodos: PropTypes.array.isRequired,
   };
 
   render() {
-    const { todos } = this.props;
+    const { currentTodos: todos } = this.props;
 
     return (
       <ul className="todo-list">

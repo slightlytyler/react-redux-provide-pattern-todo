@@ -57,8 +57,47 @@ todos.actions.clearCompleted = () => (dispatch, getState) => {
   });
 };
 
+todos.actions.setFilter = filter => ({
+  type: 'SET_TODOS_FILTER',
+  filter,
+});
+
+// Reducers
+todos.reducers.filter = (state = 'all', action) => {
+  switch (action.type) {
+    case 'SET_TODOS_FILTER':
+      return action.filter;
+
+    default:
+      return state;
+  }
+}
+
 // Selectors
 import { createSelector } from 'reselect'
+
+todos.selectors.currentFilter = state => state.todos.filter;
+
+todos.selectors.currentTodos = createSelector(
+  todos.selectors.records,
+  todos.selectors.recordsById,
+  todos.selectors.currentFilter,
+  (records, recordsById, currentFilter) => {
+    switch (currentFilter) {
+      case 'all':
+        return records;
+
+      case 'active':
+        return records.filter(id => !recordsById[id].completed);
+
+      case 'completed':
+        return records.filter(id => recordsById[id].completed);
+
+      default:
+        return records;
+    }
+  }
+);
 
 todos.selectors.allCompleted = createSelector(
   todos.selectors.records,

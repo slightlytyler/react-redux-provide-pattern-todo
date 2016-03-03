@@ -4,21 +4,45 @@ class TodoFooter extends Component {
   static propTypes = {
     remainingTodos: PropTypes.number.isRequired,
     clearCompleted: PropTypes.func.isRequired,
+    filter: PropTypes.string.isRequired,
+    setFilter: PropTypes.func.isRequired,
   };
 
+  setFilterAll = () => this.props.setFilter('all');
+
+  setFilterActive = () => this.props.setFilter('active');
+
+  setFilterCompleted = () => this.props.setFilter('completed');
+
   render() {
+    const { remainingTodos, filter } = this.props;
     return (
       <footer className="footer">
-        <span className="todo-count"><strong>{this.props.remainingTodos}</strong> item left</span>
+        <span className="todo-count"><strong>{remainingTodos}</strong> item left</span>
         <ul className="filters">
           <li>
-            <a className="selected" href="#/">All</a>
+            <a
+              className={filter === 'all' ? 'selected' : ''}
+              onClick={this.setFilterAll}
+            >
+              All
+            </a>
           </li>
           <li>
-            <a href="#/active">Active</a>
+            <a
+              className={filter === 'active' ? 'selected' : ''}
+              onClick={this.setFilterActive}
+            >
+              Active
+            </a>
           </li>
           <li>
-            <a href="#/completed">Completed</a>
+            <a
+              className={filter === 'completed' ? 'selected' : ''}
+              onClick={this.setFilterCompleted}
+            >
+              Completed
+            </a>
           </li>
         </ul>
         <button

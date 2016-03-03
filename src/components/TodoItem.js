@@ -55,7 +55,7 @@ class TodoItem extends Component {
       <div className="view" onDoubleClick={this.edit}>
         <input
           checked={completed}
-          onClick={this.toggle}
+          onChange={this.toggle}
           className="toggle"
           type="checkbox"
         />

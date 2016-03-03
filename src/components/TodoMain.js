@@ -13,8 +13,8 @@ class TodoMain extends Component {
     return (
       <section className="main">
         <input
-        checked={allCompleted}
-          onClick={toggleAll}
+          checked={allCompleted}
+          onChange={toggleAll}
           className="toggle-all"
           type="checkbox"
         />
