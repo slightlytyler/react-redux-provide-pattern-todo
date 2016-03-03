@@ -66,4 +66,10 @@ todos.selectors.allCompleted = createSelector(
   (records, recordsById) => records.length !== 0 ? records.every(id => recordsById[id].completed) : false
 );
 
+todos.selectors.remainingTodos = createSelector(
+  todos.selectors.records,
+  todos.selectors.recordsById,
+  (records, recordsById) => records.filter(id => !recordsById[id].completed).length
+);
+
 export default todos;
