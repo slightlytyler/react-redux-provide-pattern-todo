@@ -1,36 +1,42 @@
 // Provider
 import { createResourceProvider } from 'react-redux-provide-pattern';
 
-const todos = createResourceProvider('todos', 'todo', 'todoKey');
+const provider = createResourceProvider('todos', 'todo', 'todoKey');
+const {
+  constants,
+  selectors,
+  actions,
+  reducers,
+} = provider;
 
 // Constants
 const SET_TODOS_FILTER = 'SET_TODOS_FILTER';
 
-todos.constants.SET_TODOS_FILTER = SET_TODOS_FILTER;
+constants.SET_TODOS_FILTER = SET_TODOS_FILTER;
 
 // Selectors
 import { createSelector } from 'reselect'
 import { size } from 'lodash';
 
-todos.selectors.currentFilter = state => state.filter;
+selectors.currentFilter = state => state.filter;
 
-todos.selectors.activeTodos = createSelector(
-  todos.selectors.records,
-  todos.selectors.recordsById,
+selectors.activeTodos = createSelector(
+  selectors.records,
+  selectors.recordsById,
   (records, recordsById) => records.filter(id => !recordsById[id].completed)
 );
 
-todos.selectors.completedTodos = createSelector(
-  todos.selectors.records,
-  todos.selectors.recordsById,
+selectors.completedTodos = createSelector(
+  selectors.records,
+  selectors.recordsById,
   (records, recordsById) => records.filter(id => recordsById[id].completed)
 );
 
-todos.selectors.currentTodos = createSelector(
-  todos.selectors.records,
-  todos.selectors.currentFilter,
-  todos.selectors.activeTodos,
-  todos.selectors.completedTodos,
+selectors.currentTodos = createSelector(
+  selectors.records,
+  selectors.currentFilter,
+  selectors.activeTodos,
+  selectors.completedTodos,
   (records, currentFilter, activeTodos, completedTodos) => {
     switch (currentFilter) {
       case 'all':
@@ -48,14 +54,14 @@ todos.selectors.currentTodos = createSelector(
   }
 );
 
-todos.selectors.allCompleted = createSelector(
-  todos.selectors.records,
-  todos.selectors.completedTodos,
+selectors.allCompleted = createSelector(
+  selectors.records,
+  selectors.completedTodos,
   (records, completedTodos) => records.length !== 0 ? records.length === size(completedTodos) : false
 );
 
-todos.selectors.remainingTodos = createSelector(
-  todos.selectors.activeTodos,
+selectors.remainingTodos = createSelector(
+  selectors.activeTodos,
   activeTodos => size(activeTodos)
 );
 
@@ -63,48 +69,48 @@ todos.selectors.remainingTodos = createSelector(
 import { compose } from 'redux';
 import generateId from 'shortid';
 
-todos.actions.createTodo = title => todos.actions.setTodo(generateId(), {
+actions.createTodo = title => actions.setTodo(generateId(), {
   title,
   completed: false
 })
 
-todos.actions.toggleTodo = id => (dispatch, getState) => {
+actions.toggleTodo = id => (dispatch, getState) => {
   compose(
     dispatch,
-    todos.actions.updateTodo
+    actions.updateTodo
   )(
     id,
     { completed: !getState().todos.recordsById[id].completed }
   );
 };
 
-todos.actions.toggleAll = () => (dispatch, getState) => {
-  const { todos: todosState } = getState();
+actions.toggleAll = () => (dispatch, getState) => {
+  const { todos } = getState();
 
   compose(
     dispatch,
-    todos.actions.updateManyTodos,
+    actions.updateManyTodos,
   )(
-    todosState.records,
-    { completed: !todos.selectors.allCompleted(todosState) },
+    todos.records,
+    { completed: !selectors.allCompleted(todos) },
   );
 };
 
-todos.actions.clearCompleted = () => (dispatch, getState) => {
+actions.clearCompleted = () => (dispatch, getState) => {
   compose(
     dispatch,
-    todos.actions.deleteManyTodos,
-    todos.selectors.completedTodos
+    actions.deleteManyTodos,
+    selectors.completedTodos
   )(getState().todos);
 };
 
-todos.actions.setFilter = filter => ({
+actions.setFilter = filter => ({
   type: SET_TODOS_FILTER,
   filter,
 });
 
 // Reducers
-todos.reducers.filter = (state = 'all', action) => {
+reducers.filter = (state = 'all', action) => {
   switch (action.type) {
     case SET_TODOS_FILTER:
       return action.filter;
@@ -114,4 +120,4 @@ todos.reducers.filter = (state = 'all', action) => {
   }
 };
 
-export default todos;
+export default provider;
