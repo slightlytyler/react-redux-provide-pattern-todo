@@ -33,11 +33,11 @@ selectors.completedTodos = createSelector(
 );
 
 selectors.currentTodos = createSelector(
-  selectors.records,
   selectors.currentFilter,
+  selectors.records,
   selectors.activeTodos,
   selectors.completedTodos,
-  (records, currentFilter, activeTodos, completedTodos) => {
+  (currentFilter, records, activeTodos, completedTodos) => {
     switch (currentFilter) {
       case 'active':
         return activeTodos;
@@ -73,7 +73,7 @@ import generateId from 'shortid';
 actions.createTodo = title => actions.setTodo(generateId(), {
   title,
   completed: false
-})
+});
 
 actions.toggleTodo = id => (dispatch, getState) => {
   compose(
