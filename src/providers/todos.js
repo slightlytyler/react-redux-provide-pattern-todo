@@ -2,13 +2,6 @@
 import { createResourceProvider } from 'react-redux-provide-pattern';
 
 const todos = createResourceProvider('todos', 'todo', 'todoKey');
-const {
-  SET_TODO,
-  UPDATE_TODO,
-  UPDATE_MANY_TODOS,
-  DELETE_TODO,
-  DELETE_MANY_TODOS,
-} = todos.constants;
 
 // Constants
 const TOGGLE_TODO = 'TOGGLE_TODO';
@@ -18,46 +11,31 @@ todos.constants.TOGGLE_TODO = TOGGLE_TODO;
 // Actions
 import generateId from 'shortid';
 
-todos.actions.createTodo = title => ({
-  type: SET_TODO,
-  id: generateId(),
-  payload: {
-    title,
-    completed: false
-  },
-});
+todos.actions.createTodo = title => todos.actions.setTodo(generateId(), {
+  title,
+  completed: false
+})
 
 todos.actions.toggleTodo = id => (dispatch, getState) => {
-  dispatch({
-    type: UPDATE_TODO,
-    id,
-    payload: {
-      completed: !getState().todos.recordsById[id].completed
-    }
-  });
+  dispatch(todos.actions.updateTodo(id, {
+    completed: !getState().todos.recordsById[id].completed
+  }));
 };
 
 todos.actions.toggleAll = () => (dispatch, getState) => {
   const { records, recordsById } = getState().todos;
   const allCompleted = records.every(id => recordsById[id].completed);
 
-  dispatch({
-    type: UPDATE_MANY_TODOS,
-    ids: records,
-    payload: {
-      completed: !allCompleted
-    }
-  });
+  dispatch(todos.actions.updateManyTodos(records, {
+    completed: !allCompleted
+  }));
 };
 
 todos.actions.clearCompleted = () => (dispatch, getState) => {
   const { records, recordsById } = getState().todos;
   const { deleteTodo } = todos.actions;
 
-  dispatch({
-    type: DELETE_MANY_TODOS,
-    ids: records.filter(id => recordsById[id].completed),
-  });
+  dispatch(todos.actions.deleteManyTodos(records));
 };
 
 todos.actions.setFilter = filter => ({
@@ -79,7 +57,7 @@ todos.reducers.filter = (state = 'all', action) => {
 // Selectors
 import { createSelector } from 'reselect'
 
-todos.selectors.currentFilter = state => state.todos.filter;
+todos.selectors.currentFilter = state => state.filter;
 
 todos.selectors.currentTodos = createSelector(
   todos.selectors.records,
