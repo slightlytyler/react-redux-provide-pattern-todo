@@ -39,15 +39,13 @@ selectors.currentTodos = createSelector(
   selectors.completedTodos,
   (records, currentFilter, activeTodos, completedTodos) => {
     switch (currentFilter) {
-      case 'all':
-        return records;
-
       case 'active':
         return activeTodos;
 
       case 'completed':
         return completedTodos
 
+      case 'all':
       default:
         return records;
     }
@@ -57,7 +55,10 @@ selectors.currentTodos = createSelector(
 selectors.allCompleted = createSelector(
   selectors.records,
   selectors.completedTodos,
-  (records, completedTodos) => records.length !== 0 ? records.length === size(completedTodos) : false
+  (records, completedTodos) =>
+    size(records) !== 0
+      ? size(records) === size(completedTodos)
+      : false
 );
 
 selectors.remainingTodos = createSelector(
