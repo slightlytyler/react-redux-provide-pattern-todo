@@ -2,7 +2,13 @@
 import { createResourceProvider } from 'react-redux-provide-pattern';
 
 const todos = createResourceProvider('todos', 'todo', 'todoKey');
-const { SET_TODO, UPDATE_TODO, DELETE_TODO } = todos.constants;
+const {
+  SET_TODO,
+  UPDATE_TODO,
+  UPDATE_MANY_TODOS,
+  DELETE_TODO,
+  DELETE_MANY_TODOS,
+} = todos.constants;
 
 // Constants
 const TOGGLE_TODO = 'TOGGLE_TODO';
@@ -35,25 +41,22 @@ todos.actions.toggleAll = () => (dispatch, getState) => {
   const { records, recordsById } = getState().todos;
   const allCompleted = records.every(id => recordsById[id].completed);
 
-  records.forEach(id =>
-    dispatch({
-      type: UPDATE_TODO,
-      id,
-      payload: {
-        completed: !allCompleted
-      }
-    })
-  );
+  dispatch({
+    type: UPDATE_MANY_TODOS,
+    ids: records,
+    payload: {
+      completed: !allCompleted
+    }
+  });
 };
 
 todos.actions.clearCompleted = () => (dispatch, getState) => {
   const { records, recordsById } = getState().todos;
   const { deleteTodo } = todos.actions;
 
-  records.forEach(id => {
-    if (recordsById[id].completed) {
-      dispatch(deleteTodo(id));
-    }
+  dispatch({
+    type: DELETE_MANY_TODOS,
+    ids: records.filter(id => recordsById[id].completed),
   });
 };
 
