@@ -30,6 +30,8 @@ class TodoItem extends Component {
   acceptChanges = () => {
     const title = this.refs.edit.value;
 
+    this.setState({ editing: false });
+
     if (title) {
       this.props.updateTodo(this.props.todo.id, {
         title,
@@ -38,8 +40,6 @@ class TodoItem extends Component {
     else {
       this.props.deleteTodo(this.props.todo.id);
     }
-
-    this.setState({ editing: false });
   };
 
   handleClickOutside = e => {
